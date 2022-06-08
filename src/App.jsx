@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
-import logo from './logo.svg'
 import './App.css'
 import Loader from './components/Loader'
+import WheaterCard from './components/WheaterCard'
+import axios from 'axios'
 
 function App() {
   const [loading, setLoading] = useState(false)
-  const [position, setPosition] =useState();
+  const [position, setPosition] = useState();
+  const [weather, setWeather] = useState();
 
-  let lon , lat;
+  let lon, lat;
 
   useEffect(() => {
 
@@ -15,23 +17,51 @@ function App() {
 
       lon = position.coords.longitude;
       lat = position.coords.latitude;
+
+      setPosition({ lon, lat })
       
-      setPosition({lon,lat})
-      setLoading(!loading)
+
     }
 
     navigator.geolocation.getCurrentPosition(success);
 
-    
   }, [])
+
+  useEffect(() => {
+
+    if (position !== undefined) {
+      const API_KEY = '81c71d1ea3e659fe2fe5bf3cc3f8c5b5';
+      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${position?.lat}&lon=${position?.lon}&appid=${API_KEY}`
+
+      axios.get(url)
+        .then(res => setWeather(res.data))
+        .catch(error => console.log(error))
+      
+      
+      
+    }
+
+  }, [position])
+
+  useEffect(() => {
+    if(weather!==undefined){
+      setLoading(!loading)
+    }
+  }, [weather])
+
+  console.log(weather);
+
   return (
     <div className="App">
       {
-        loading ? 
-          <h1>{`latitude: ${position?.lat} longitude: ${position?.lon}`}</h1>
-        :
+        loading ?
+          <WheaterCard
+            weather={weather}
+          />
+          :
           <Loader />
       }
+
     </div>
   )
 }

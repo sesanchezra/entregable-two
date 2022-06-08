@@ -26,7 +26,7 @@ h1 {
   }
   
   .let1 {
-    animation: drop 0.8s ease-in-out infinite;
+    animation: drop 1.2s ease-in-out infinite;
     animation-delay: 0.8s;
   }
   
@@ -115,3 +115,18 @@ h1 {
     }
 }
   
+
+@media (prefers-color-scheme: dark){
+  .loader{
+    background-color: black;
+  }
+
+  .loader > *{
+    color: white;
+  }
+
+  .lds-dual-ring:after {
+    border: 6px solid rgb(255, 255, 255);
+    border-color: rgb(255, 255, 255) transparent rgb(255, 255, 255) transparent;
+  }
+}
